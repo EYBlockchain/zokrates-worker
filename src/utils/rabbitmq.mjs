@@ -12,7 +12,6 @@ export default {
 
   // publish message to a queue
   async sendMessage(queue, data, options = {}) {
-    await this.channel.assertQueue(queue);
     this.channel.sendToQueue(queue, Buffer.from(JSON.stringify(data)), options);
   },
 
