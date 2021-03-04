@@ -25,9 +25,7 @@ const fileToBuffer = filename => {
   });
 };
 
-const generateUuid = () => `${Math.random().toString()}
-  ${Math.random().toString()}
-  ${Math.random().toString()}`;
+const generateUuid = () => `${Math.random()}${Math.random()}${Math.random()}`;
 
 const { expect } = chai;
 let file;
