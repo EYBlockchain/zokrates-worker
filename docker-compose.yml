@@ -25,3 +25,6 @@ services:
     image: rabbitmq
     ports:
       - '5672:5672'
+    environment:
+      # this will enable log to be written on file 'log_files' instead standard output
+      RABBITMQ_LOGS: './log_files'
