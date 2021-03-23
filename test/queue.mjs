@@ -31,6 +31,9 @@ const generateUuid = () => `${Math.random().toString()}
 
 const { expect } = chai;
 let file;
+let vk;
+let proof;
+let inputs;
 
 const { env } = process;
 env.RABBITMQ_HOST = 'amqp://localhost';
@@ -90,6 +93,7 @@ describe('Testing the Zokrates queue mechanism', () => {
       expect(response).to.have.property('data');
       expect(response.data).to.have.property('vk');
       expect(response.data.vk.h).to.be.instanceof(Array);
+      vk = response.data.vk;
       done();
     });
   });
@@ -151,6 +155,35 @@ describe('Testing the Zokrates queue mechanism', () => {
       expect(response.data.proof.a).to.be.instanceof(Array);
       expect(response.data.type).to.equal('factor');
       expect(response.data.transactionInputs).to.equal('test');
+      proof = response.data.proof;
+      inputs = response.data.inputs;
+      done();
+    });
+  });
+
+  it('should verify the proof offchain', done => {
+    const correlationId = generateUuid();
+    const queue = 'verify';
+    const replyTo = `${queue}-reply`; // replyTo queue
+
+    rabbitmq.sendMessage(
+      queue,
+      {
+        vk,
+        proof,
+        provingScheme: 'gm17',
+        backend: 'libsnark',
+        curve: 'bn128',
+        inputs,
+      },
+      {
+        correlationId,
+        replyTo,
+      },
+    );
+
+    rabbitmq.listenToReplyQueue(replyTo, correlationId, response => {
+      expect(response.data.verifies).to.equal(true);
       done();
     });
   });
