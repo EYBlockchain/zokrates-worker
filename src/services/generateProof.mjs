@@ -14,7 +14,7 @@ export default async function ({
   transactionInputs,
   outputDirectoryPath,
   proofFileName,
-  backend = 'zexe',
+  backend = 'ark', // zexe backend now named ark
   provingScheme = 'gm17',
 }) {
   const outputPath = `./output`;
@@ -64,7 +64,6 @@ export default async function ({
 
     logger.info(`Complete`);
     logger.debug(`Responding with proof and inputs:`);
-    logger.debug(proof);
     logger.debug(publicInputs);
   } finally {
     try {
