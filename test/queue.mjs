@@ -87,7 +87,7 @@ describe('Testing the Zokrates queue mechanism', () => {
     rabbitmq.listenToReplyQueue(replyTo, correlationId, response => {
       expect(response).to.have.property('data');
       expect(response.data).to.have.property('vk');
-      expect(response.data.vk).to.have.property('raw');
+      expect(response.data.vk).to.have.property('query');
       expect(response.data.vk.h).to.be.instanceof(Array);
       done();
     });
