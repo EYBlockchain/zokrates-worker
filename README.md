@@ -206,14 +206,16 @@ key: "folderpath", value: "test"
 To test a particular `.zok` file manually in the terminal:
 
 (You might need to do
-`docker pull docker.pkg.github.com/eyblockchain/zokrates-worker/zokrates_zexe_worker:<version>` if
-you haven't already).
+`docker pull docker.pkg.github.com/eyblockchain/zokrates-worker/zokrates_worker:<version>` if you
+haven't already).
 
 `cd path/to/parent-dir-of-zok-file/`
 
 `docker run -v $PWD:/home/zokrates/code -ti docker.pkg.github.com/eyblockchain/zokrates-worker/zokrates_worker:<version> /bin/bash`
 (mounting to `/code` ensures the outputs from zokrates don't overwrite / mix with our local
 machine's files).
+
+For zokrates worker v1.2.3 and below (uses ZoKrates 0.6.1 and below):
 
 `./zokrates compile -c bn128 -i code/<circuitName>.zok`
 
@@ -222,3 +224,16 @@ machine's files).
 `./zokrates compute-witness -a <inputs>`
 
 `./zokrates generate-proof -b libsnark -proving-scheme gm17`
+
+For later versions (uses ZoKrates 0.6.4):
+
+`./zokrates/bin/zokrates compile -c bn128 -i code/<circuitName>.zok`
+
+`./zokrates/bin/zokrates setup -b libsnark -proving-scheme gm17`
+
+`./zokrates/bin/zokrates compute-witness -a <inputs>`
+
+`./zokrates/bin/zokrates generate-proof -b libsnark -proving-scheme gm17`
+
+Tip: add the `--light` tag to any of the above commands and you won't see walls of compiled circuits
+filling up your terminal.
