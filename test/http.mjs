@@ -52,7 +52,7 @@ describe('Testing the http API', () => {
       })
       .end((err, res) => {
         expect(res.body).to.have.property('vk');
-        expect(res.body.vk).to.have.property('raw');
+        expect(res.body.vk).to.have.property('query');
         expect(res.body.vk.h).to.be.instanceof(Array);
         vk = res.body.vk;
         done();
