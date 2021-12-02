@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import zokrates from '@eyblockchain/zokrates-zexe.js';
-import rabbitmq from '../utils/rabbitmq.mjs';
 import logger from '../utils/logger.mjs';
 
 export default async function({
