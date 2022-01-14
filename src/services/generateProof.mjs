@@ -5,6 +5,7 @@ import zokrates from '@eyblockchain/zokrates-zexe.js';
 import path from 'path';
 import { getProofFromFile } from '../utils/filing.mjs';
 import logger from '../utils/logger.mjs';
+import { formatTrackingID } from '../utils/formatter.mjs';
 
 const unlink = util.promisify(fs.unlink);
 
@@ -16,6 +17,7 @@ export default async function ({
   proofFileName,
   backend = 'ark', // zexe backend now named ark
   provingScheme = 'gm17',
+  trackingID,
 }) {
   const outputPath = `./output`;
   let proof, publicInputs;
@@ -29,11 +31,11 @@ export default async function ({
   const proofJsonFile = `${circuitName}_${fileNamePrefix}_proof.json`;
 
   if (fs.existsSync(`${outputPath}/${folderpath}/${witnessFile}`)) {
-    throw Error('Witness file with same name exists');
+    throw Error(`${formatTrackingID(trackingID)} Witness file with same name exists`);
   }
 
   if (fs.existsSync(`${outputPath}/${folderpath}/${proofJsonFile}`)) {
-    throw Error('proof.json file with same name exists');
+    throw Error(`${formatTrackingID(trackingID)} proof.json file with same name exists`);
   }
 
   const opts = {};
@@ -42,7 +44,7 @@ export default async function ({
   opts.fileName = proofFileName || `${proofJsonFile}`;
 
   try {
-    logger.info('Compute witness...');
+    logger.info(`${formatTrackingID(trackingID)} Compute witness...`);
     await zokrates.computeWitness(
       `${outputPath}/${folderpath}/${circuitName}_out`,
       `${outputPath}/${folderpath}/`,
@@ -50,7 +52,7 @@ export default async function ({
       inputs,
     );
 
-    logger.info('Generate proof...');
+    logger.info(`${formatTrackingID(trackingID)} Generate proof...`);
     await zokrates.generateProof(
       `${outputPath}/${folderpath}/${circuitName}_pk.key`,
       `${outputPath}/${folderpath}/${circuitName}_out`,
@@ -63,7 +65,7 @@ export default async function ({
     ({ proof, inputs: publicInputs } = await getProofFromFile(`${folderpath}/${proofJsonFile}`));
 
     logger.info(`Complete`);
-    logger.debug(`Responding with proof and inputs:`);
+    logger.debug(`${formatTrackingID(trackingID)}Responding with proof and inputs:`);
     logger.debug(publicInputs);
   } finally {
     try {
