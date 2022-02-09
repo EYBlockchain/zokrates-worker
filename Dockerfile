@@ -6,6 +6,7 @@ FROM node:14.11.0 as node-build
 ARG GPR_TOKEN
 WORKDIR /app
 COPY ./package.json ./package-lock.json ./.npmrc ./
+RUN export GPR_TOKEN=${{ secrets.GITHUB_TOKEN }}
 RUN npm ci
 RUN rm -f .npmrc
 
