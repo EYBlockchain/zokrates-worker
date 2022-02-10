@@ -9,7 +9,7 @@ COPY ./package.json ./package-lock.json ./.npmrc ./
 RUN npm ci
 RUN rm -f .npmrc
 
-FROM node:14.11.0
+FROM node:12.18
 WORKDIR /app
 
 COPY --from=node-build /app /app
