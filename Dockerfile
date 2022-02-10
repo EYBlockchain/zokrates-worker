@@ -6,6 +6,8 @@ FROM node:12.18 as node-build
 ARG GPR_TOKEN
 WORKDIR /app
 COPY ./package.json ./package-lock.json ./.npmrc ./
+RUN npm config set '//npm.pkg.github.com/:_authToken=${GPR_TOKEN}'
+RUN npm publish
 RUN npm ci
 RUN rm -f .npmrc
 
