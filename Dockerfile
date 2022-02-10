@@ -5,6 +5,7 @@ FROM zokrates/zokrates:0.6.4 as builder
 FROM node:12.18 as node-build
 ARG GPR_TOKEN
 WORKDIR /app
+RUN echo config
 COPY ./package.json ./package-lock.json ./.npmrc ./
 RUN npm config set '//npm.pkg.github.com/:_authToken=${GPR_TOKEN}'
 RUN npm publish
