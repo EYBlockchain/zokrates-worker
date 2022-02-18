@@ -6,8 +6,8 @@ import logger from '../utils/logger.mjs';
 export default async function({
   filepath,
   curve = 'bn128',
-  backend = 'ark', // zexe backend now named ark
-  provingScheme = 'gm17',
+  backend = 'bellman',
+  provingScheme = 'g16',
 }) {
   const outputPath = `./output`;
   const circuitsPath = `./circuits`;
