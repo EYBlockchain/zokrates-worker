@@ -15,8 +15,8 @@ export default async function ({
   transactionInputs,
   outputDirectoryPath,
   proofFileName,
-  backend = 'ark', // zexe backend now named ark
-  provingScheme = 'gm17',
+  backend = 'bellman',
+  provingScheme = 'g16',
   trackingID,
 }) {
   const outputPath = `./output`;

@@ -1,6 +1,6 @@
 ARG GPR_TOKEN
 
-FROM zokrates/zokrates:0.6.4 as builder
+FROM zokrates/zokrates:0.7.7 as builder
 
 FROM node:12.18 as node-build
 ARG GPR_TOKEN
