@@ -1,18 +1,15 @@
 ARG GPR_TOKEN
 
-FROM zokrates/zokrates:0.6.4 as builder
+FROM zokrates/zokrates:0.7.7 as builder
 
-FROM node:12.18 as node-build
+FROM node:14.11.0 as node-build
 ARG GPR_TOKEN
 WORKDIR /app
-RUN echo config
 COPY ./package.json ./package-lock.json ./.npmrc ./
-RUN npm config set '//npm.pkg.github.com/:_authToken=${GPR_TOKEN}'
-RUN npm publish
 RUN npm ci
 RUN rm -f .npmrc
 
-FROM node:12.18
+FROM node:14.11.0
 WORKDIR /app
 
 COPY --from=node-build /app /app
