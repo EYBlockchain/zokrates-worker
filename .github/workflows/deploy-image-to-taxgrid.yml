@@ -21,12 +21,36 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      - uses: actions/setup-node@v1
         with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ghcr.io/eyblockchain/taxgrid-api/tg-zokrates-worker:latest
+          node-version: '12.x'
+      - name: npm install
+        run: |
+          npm ci
+        env:
+          GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI: true
+
+      #      - name: semantic release
+      #        uses: codfish/semantic-release-action@master
+      #        id: semantic
+      #        env:
+      #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #          GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      -
+      - name: Docker push version
+        if: steps.semantic.outputs.new-release-published == 'true'
+        run: |
+          docker build --build-arg GPR_TOKEN=$GPR_TOKEN -t ghcr.io/eyblockchain/taxgrid-api/tg-zokrates-worker:latest .
+          docker push ghcr.io/eyblockchain/taxgrid-api/tg-zokrates-worker:latest
+        env:
+          GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v1
+#      - name: Build and push
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: .
+#          file: ./Dockerfile
+#          push: true
+#          tags: ghcr.io/eyblockchain/taxgrid-api/tg-zokrates-worker:latest
