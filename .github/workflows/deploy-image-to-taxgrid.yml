@@ -37,7 +37,6 @@ jobs:
       #        env:
       #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #          GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      -
       - name: Docker push version
         if: steps.semantic.outputs.new-release-published == 'true'
         run: |
