@@ -1,26 +1,25 @@
 import fs from 'fs';
 import util from 'util';
 import crypto from 'crypto';
-import zokrates from '@eyblockchain/zokrates-zexe.js';
 import path from 'path';
+import { computeWitness, generateProof } from '../zokrates-lib/index.mjs';
 import { getProofFromFile } from '../utils/filing.mjs';
 import logger from '../utils/logger.mjs';
-import { formatTrackingID } from '../utils/formatter.mjs';
 
 const unlink = util.promisify(fs.unlink);
 
-export default async function ({
+export default async ({
   folderpath,
   inputs,
   transactionInputs,
   outputDirectoryPath,
   proofFileName,
-  backend = 'ark', // zexe backend now named ark
-  provingScheme = 'gm17',
-  trackingID,
-}) {
+  backend = 'bellman',
+  provingScheme = 'g16',
+}) => {
   const outputPath = `./output`;
-  let proof, publicInputs;
+  let proof;
+  let publicInputs;
 
   // unique hash to name witness and proof.json files
   // to avoid overwrite on concurrent call.
@@ -31,11 +30,11 @@ export default async function ({
   const proofJsonFile = `${circuitName}_${fileNamePrefix}_proof.json`;
 
   if (fs.existsSync(`${outputPath}/${folderpath}/${witnessFile}`)) {
-    throw Error(`${formatTrackingID(trackingID)} Witness file with same name exists`);
+    throw Error('Witness file with same name exists');
   }
 
   if (fs.existsSync(`${outputPath}/${folderpath}/${proofJsonFile}`)) {
-    throw Error(`${formatTrackingID(trackingID)} proof.json file with same name exists`);
+    throw Error('proof.json file with same name exists');
   }
 
   const opts = {};
@@ -44,16 +43,16 @@ export default async function ({
   opts.fileName = proofFileName || `${proofJsonFile}`;
 
   try {
-    logger.info(`${formatTrackingID(trackingID)} Compute witness...`);
-    await zokrates.computeWitness(
+    logger.info('Compute witness...');
+    await computeWitness(
       `${outputPath}/${folderpath}/${circuitName}_out`,
       `${outputPath}/${folderpath}/`,
       `${witnessFile}`,
       inputs,
     );
 
-    logger.info(`${formatTrackingID(trackingID)} Generate proof...`);
-    await zokrates.generateProof(
+    logger.info('Generate proof...');
+    await generateProof(
       `${outputPath}/${folderpath}/${circuitName}_pk.key`,
       `${outputPath}/${folderpath}/${circuitName}_out`,
       `${outputPath}/${folderpath}/${witnessFile}`,
@@ -65,7 +64,8 @@ export default async function ({
     ({ proof, inputs: publicInputs } = await getProofFromFile(`${folderpath}/${proofJsonFile}`));
 
     logger.info(`Complete`);
-    logger.debug(`${formatTrackingID(trackingID)}Responding with proof and inputs:`);
+    logger.debug(`Responding with proof and inputs:`);
+    logger.debug(`${JSON.stringify(proof, null, 2)}`);
     logger.debug(publicInputs);
   } finally {
     try {
@@ -82,4 +82,4 @@ export default async function ({
     transactionInputs,
     type: folderpath,
   };
-}
+};

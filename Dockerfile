@@ -1,31 +1,32 @@
-ARG GPR_TOKEN
-
-FROM zokrates/zokrates:0.6.4 as builder
-
-FROM node:14.11.0 as node-build
-ARG GPR_TOKEN
+# build zokrates from source for local verify
+FROM rust:1.53.0 as builder
 WORKDIR /app
-COPY ./package.json ./package-lock.json ./.npmrc ./
-RUN npm ci
-RUN rm -f .npmrc
+COPY . .
+RUN git clone --depth 1 --branch 0.7.12 https://github.com/Zokrates/ZoKrates.git
+WORKDIR /app/ZoKrates
+RUN rustup install nightly-2022-06-28
+RUN cargo +nightly-2022-06-28 build -p zokrates_cli --release
 
-FROM node:14.11.0
+FROM ubuntu:20.04
 WORKDIR /app
 
-COPY --from=node-build /app /app
-COPY --from=builder /home/zokrates/.zokrates/bin/zokrates /app/zokrates
-COPY --from=builder /home/zokrates/.zokrates/stdlib /app/stdlib/
-COPY ./src ./src
-COPY ./circuits ./circuits
-COPY ./config ./config
-COPY ./start-script ./start-script
-COPY ./start-dev ./start-dev
+COPY config/default.js config/default.js
+COPY package.json package-lock.json ./
+COPY --from=builder /app/ZoKrates/zokrates_stdlib/stdlib /app/stdlib
+COPY --from=builder /app/ZoKrates/target/release/zokrates /app/zokrates
+COPY src ./src
+COPY start-script ./start-script
+COPY start-dev ./start-dev
 
 RUN apt-get update -y
-RUN apt-get install -y netcat
+RUN apt-get install -y netcat curl
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs gcc g++ make
 
 ENV ZOKRATES_HOME /app
 ENV ZOKRATES_STDLIB /app/stdlib
+
+RUN npm ci
 
 EXPOSE 80
 CMD npm start

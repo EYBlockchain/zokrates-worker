@@ -1,4 +1,4 @@
-/* eslint-disable babel/camelcase */
+/* eslint-disable camelcase */
 
 import fs from 'fs';
 import tar from 'tar';
@@ -9,10 +9,7 @@ const outputPath = `/app/output`;
 
 const vkPath = circuitPath => `${outputPath}/${circuitPath}/${path.basename(circuitPath)}_vk.key`;
 
-const proofPath = circuitPath =>
-  `${outputPath}/${circuitPath}/${path.basename(circuitPath)}_proof.json`;
-
-export const readJsonFile = filePath => {
+const readJsonFile = filePath => {
   if (fs.existsSync(filePath)) {
     const file = fs.readFileSync(filePath);
     return JSON.parse(file);
@@ -21,27 +18,12 @@ export const readJsonFile = filePath => {
   return null;
 };
 
-const writeJsonFile = (filePath, jsonObject) => {
-  // this will overwrite any existing file:
-  try {
-    fs.writeFileSync(filePath, JSON.stringify(jsonObject));
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
 /**
 Strip the 'raw' field from the vk data
 */
-export const stripRawData = vk => {
-  const { h, g_alpha, h_beta, g_gamma, h_gamma, query } = vk;
-  return { h, g_alpha, h_beta, g_gamma, h_gamma, query };
-};
-
-export const getVerificationKeyByCircuitName = circuitName => {
-  const vk = readJsonFile(vkPath(circuitName));
-  const strippedVK = vk === null ? vk : stripRawData(vk);
-  return strippedVK;
+const stripRawData = vk => {
+  const { alpha, beta, gamma, delta, gamma_abc } = vk;
+  return { alpha, beta, gamma, delta, gamma_abc };
 };
 
 export const getVerificationKeyByCircuitPath = circuitPath => {
@@ -50,15 +32,9 @@ export const getVerificationKeyByCircuitPath = circuitPath => {
   return strippedVK;
 };
 
-export const getProofByCircuitPath = circuitPath => {
-  const { proof, inputs } = readJsonFile(proofPath(circuitPath));
-  return { proof, inputs };
-};
-
 export const getProofFromFile = filePath => {
-  console.log('in filling ', `${outputPath}/${filePath}`);
   return readJsonFile(`${outputPath}/${filePath}`);
-}
+};
 
 export const untarFiles = async (filePath, fileName) => {
   const dir = fileName.replace('.tar', '');
@@ -69,7 +45,7 @@ export const untarFiles = async (filePath, fileName) => {
   }
   await tar.x({
     file: `${filePath}/${fileName}`,
-    cwd: cwd,
+    cwd,
   });
   return exists;
 };
@@ -87,6 +63,12 @@ export const deleteFile = async filePath => {
       return null;
     },
   );
+};
+
+export const deleteSingleFile = fileName => {
+  fs.unlink(fileName, err => {
+    if (err) throw err;
+  });
 };
 
 export const getFilesRecursively = (dir, fileList = []) => {

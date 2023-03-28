@@ -1,14 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import zokrates from '@eyblockchain/zokrates-zexe.js';
+import { compile, extractVk, exportKeys, setup } from '../zokrates-lib/index.mjs';
 import logger from '../utils/logger.mjs';
 
-export default async function({
-  filepath,
-  curve = 'bn128',
-  backend = 'ark', // zexe backend now named ark
-  provingScheme = 'gm17',
-}) {
+export default async function generateKeys({ filepath, curve = 'bn128' }) {
   const outputPath = `./output`;
   const circuitsPath = `./circuits`;
 
@@ -18,25 +13,32 @@ export default async function({
 
   fs.mkdirSync(`${outputPath}/${circuitDir}`, { recursive: true });
 
-  logger.info('Compile...');
-  await zokrates.compile(
+  logger.info(
     `${circuitsPath}/${filepath}`,
     `${outputPath}/${circuitDir}`,
     `${circuitName}_out`,
     curve,
   );
 
-  logger.info('Setup...');
-  await zokrates.setup(
-    `${outputPath}/${circuitDir}/${circuitName}_out`,
+  logger.info('Compile...');
+  await compile(
+    `${circuitsPath}/${filepath}`,
     `${outputPath}/${circuitDir}`,
-    provingScheme,
-    backend,
-    `${circuitName}_vk`,
-    `${circuitName}_pk`,
+    `${circuitName}_out`,
+    curve,
   );
 
-  const vk = await zokrates.extractVk(`${outputPath}/${circuitDir}/${circuitName}_vk.key`);
+    logger.info('Setup...');
+    await setup(
+      `${outputPath}/${circuitDir}/${circuitName}_out`,
+      `${outputPath}/${circuitDir}`,
+      'g16',
+      'bellman',
+      `${circuitName}_vk`,
+      `${circuitName}_pk`,
+    );
+
+  const vk = await extractVk(`${outputPath}/${circuitDir}/${circuitName}_vk.key`);
 
   logger.info(`Complete ${filepath}`);
   return { vk, filepath };
