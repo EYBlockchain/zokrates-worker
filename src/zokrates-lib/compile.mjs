@@ -30,7 +30,7 @@ export default async function compile(
   const parsedOutputPath = outputPath.endsWith('/') ? outputPath : `${outputPath}/`;
   return new Promise((resolve, reject) => {
     const zokrates = spawn(
-      '/app/zokrates',
+      '/app/zokratesv0.7.12',
       ['compile', '-i', codePath, '-o', `${parsedOutputPath}${parsedOutputName}`, '--curve', curve],
       {
         stdio: ['ignore', 'pipe', 'pipe'],
