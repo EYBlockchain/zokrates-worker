@@ -48,8 +48,8 @@ RUN dpkg -i libcrypt1_4.4.18-4_amd64.deb || :
 RUN cd /etc
 RUN mkdir libc6
 RUN cd libc6/
-RUN wget http://ftp.de.debian.org/debian/pool/main/g/glibc/libc6_2.31-13+deb11u3_amd64.deb
-RUN dpkg -i libc6_2.31-13+deb11u3_amd64.deb || :
+RUN wget http://ftp.de.debian.org/debian/pool/main/g/glibc/libc6_2.31-13+deb11u5_amd64.deb
+RUN dpkg -i libc6_2.31-13+deb11u5_amd64.deb || :
 RUN cd ..
 
 ENV ZOKRATES_HOME /app
