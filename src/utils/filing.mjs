@@ -34,8 +34,8 @@ const writeJsonFile = (filePath, jsonObject) => {
 Strip the 'raw' field from the vk data
 */
 export const stripRawData = vk => {
-  const { h, g_alpha, h_beta, g_gamma, h_gamma, query } = vk;
-  return { h, g_alpha, h_beta, g_gamma, h_gamma, query };
+  const { alpha, beta, gamma, delta, gamma_abc } = vk;
+  return { alpha, beta, gamma, delta, gamma_abc };
 };
 
 export const getVerificationKeyByCircuitName = circuitName => {
