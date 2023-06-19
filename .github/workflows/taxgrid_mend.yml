@@ -24,10 +24,16 @@ jobs:
         with:
           node-version: '12.x'
 
-      - name: Install Modules
-        run: npm install
+    #   - name: Install Modules
+    #     run: npm install
+    #     env:
+    #       GPR_TOKEN: ${{ secrets.GPR_TOKEN }}   
+      - name: npm install
+        run: |
+          npm ci
         env:
-          GPR_TOKEN: ${{ secrets.GPR_TOKEN }}   
+          GPR_TOKEN: ${{ secrets.GPR_TOKEN }}
+          CI: true
 
       - name: Download unified agent
         run: |
