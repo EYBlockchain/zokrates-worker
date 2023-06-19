@@ -37,7 +37,6 @@ jobs:
 
       - name: Run whitesource unified agent
         run: |
-            echo "userkey: " ${{ secrets.MEND_USER_KEY }}
             cat /home/runner/work/zokrates-worker/zokrates-worker/wss-unified-agent.config
             java -jar wss-unified-agent.jar -c /home/runner/work/zokrates-worker/zokrates-worker/wss-unified-agent.config -apikey $MEND_API_KEY -userkey $MEND_USER_KEY
         env:
