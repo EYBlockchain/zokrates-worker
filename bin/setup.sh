@@ -11,8 +11,8 @@ docker-compose up -d api
 # delay needed to ensure all container are in running state.
 sleep 5
 
-printf "\n${GREEN}*** Running setup for factor.zok ***${NC}\n"
-curl -d '{"filepath": "factor.zok"}' -H "Content-Type: application/json" -X POST http://localhost:8080/generate-keys
+printf "\n${GREEN}*** Running setup for circuits/remove.zok ***${NC}\n"
+curl -d '{"filepath": "circuits/remove.zok"}' -H "Content-Type: application/json" -X POST http://localhost:8080/generate-keys
 
 # printf "\n${GREEN}*** Running setup for square.zok ***${NC}\n"
 # curl -d '{"filepath": "examples/square.zok"}' -H "Content-Type: application/json" -X POST http://localhost:8080/generate-keys
@@ -23,8 +23,8 @@ curl -d '{"filepath": "factor.zok"}' -H "Content-Type: application/json" -X POST
 
 printf "\n${GREEN}*** Setups complete ***${NC}\n"
 
-printf "\n${GREEN}*** Generate-Proof for factor.zok ***${NC}\n"
-curl -d '{"folderpath": "factor", "inputs": "632"}' -H "Content-Type: application/json" -X POST http://localhost:8080/generate-proof
+printf "\n${GREEN}*** Generate-Proof for circuits/remove.zok ***${NC}\n"
+curl -d '{"folderpath": "circuits/remove.zok", "inputs": "24"}' -H "Content-Type: application/json" -X POST http://localhost:8080/generate-proof
 
 printf "\n${GREEN}*** Generate-Proof complete ***${NC}\n"
 

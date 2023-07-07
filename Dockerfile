@@ -18,8 +18,8 @@ WORKDIR /app
 
 COPY config/default.js config/default.js
 COPY package.json package-lock.json ./
-COPY --from=builder /app/zoKratesv0.7.12/zokrates_stdlib/stdlib /app/stdlibv0.7.12
-COPY --from=builder /app/zoKratesv0.7.12/target/release/zokrates /app/zokratesv0.7.12
+COPY --from=builder /app/zoKratesv0.7.12/zokrates_stdlib/stdlib /app/stdlibv7
+COPY --from=builder /app/zoKratesv0.7.12/target/release/zokrates /app/zokratesv7
 COPY --from=builder /app/zoKrates/zokrates_stdlib/stdlib /app/stdlib
 COPY --from=builder /app/zoKrates/target/release/zokrates /app/zokrates
 COPY src ./src
@@ -32,7 +32,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs gcc g++ make
 
 ENV ZOKRATES_HOME /app
-ENV ZOKRATES_STDLIBv0.7.12 /app/stdlib
+ENV ZOKRATES_STDLIBv7 /app/stdlibv7
 ENV ZOKRATES_STDLIB /app/stdlib
 
 RUN npm ci
