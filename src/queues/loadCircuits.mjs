@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import rabbitmq from '../utils/rabbitmq.mjs';
 import logger from '../utils/logger.mjs';
 import loadCircuits from '../services/loadCircuits.mjs';

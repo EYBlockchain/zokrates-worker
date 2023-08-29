@@ -25,11 +25,21 @@ async function compile(
   }
   const parsedOutputName = outputName; // TODO can have more checks here
   // TODO: Check if outputPath is directory, otherwise throw.
-  const parsedOutputPath = outputPath.endsWith('/') ? outputPath : `${outputPath}/`;
+  const parsedOutputPath = outputPath.endsWith('/')
+    ? outputPath
+    : `${outputPath}/`;
   return new Promise((resolve, reject) => {
     const zokrates = spawn(
       '/app/zokrates',
-      ['compile', '-i', codePath, '-o', `${parsedOutputPath}${parsedOutputName}`, '--curve', curve],
+      [
+        'compile',
+        '-i',
+        codePath,
+        '-o',
+        `${parsedOutputPath}${parsedOutputName}`,
+        '--curve',
+        curve,
+      ],
       {
         stdio: ['ignore', 'pipe', 'pipe'],
         env: {

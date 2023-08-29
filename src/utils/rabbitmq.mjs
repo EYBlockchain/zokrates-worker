@@ -1,6 +1,7 @@
 import amqp from 'amqplib';
+// eslint-disable-next-line import/no-cycle
 import queues from '../queues/index.mjs';
-import logger from '../utils/logger.mjs';
+import logger from './logger.mjs';
 
 let connection;
 let channel;
@@ -8,12 +9,15 @@ let channel;
 // connect to RabbitMQ server.
 const connect = async () => {
   logger.info('[AMQP] Connecting...');
-  connection = await amqp.connect(`${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`);
+  connection = await amqp.connect(
+    `${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`,
+  );
   connection.on('error', err => {
     if (err.message !== 'Connection closing') {
       logger.error(`[AMQP] Connection error: ${err.message}`);
       return setTimeout(connect, 1000);
     }
+    return true;
   });
   connection.on('close', () => {
     logger.debug('[AMQP] Reconnecting');
@@ -56,7 +60,14 @@ const listenToReplyQueue = async (queue, correlationId, callback) => {
   logger.info(`[AMQP] Listening to reply queue: ${queue}`);
   receiveMessage(queue, message => {
     if (message.properties.correlationId !== correlationId) {
-      logger.debug(`[AMQP] Sending NACK due to different correlation id: ${JSON.stringify({ message: message.properties.correlationId, param: correlationId })}`);
+      logger.debug(
+        `[AMQP] Sending NACK due to different correlation id: ${JSON.stringify(
+          {
+            message: message.properties.correlationId,
+            param: correlationId,
+          },
+        )}`,
+      );
       return sendNACK(message);
     }
     cancelChannelConsume(message.fields.consumerTag);

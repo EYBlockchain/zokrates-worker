@@ -1,13 +1,17 @@
 import fs from 'fs';
+import {
+  untarFiles,
+  deleteFile,
+  getFilesRecursively,
+} from '../utils/filing.mjs';
 
-import rabbitmq from '../utils/rabbitmq.mjs';
-import { untarFiles, deleteFile, getFilesRecursively } from '../utils/filing.mjs';
-
-export default async function(circuits) {
+export default async function loadCircuits(circuits) {
   const outputPath = `./circuits/`;
 
   if (!circuits.name.endsWith('.tar') && !circuits.name.endsWith('.zok')) {
-    throw Error(`Expected an archive file with extension '.tar'. Got ${circuits.name}`);
+    throw Error(
+      `Expected an archive file with extension '.tar'. Got ${circuits.name}`,
+    );
   }
 
   const exists = fs.existsSync(`${outputPath}${circuits.name}`);
@@ -26,7 +30,9 @@ export default async function(circuits) {
   if (circuits.name.endsWith('.tar')) {
     // unarchive the circuit files and put in a list then delete the archive
     overwrote = await untarFiles('/app/circuits', circuits.name);
-    const files = await getFilesRecursively(`/app/circuits/${circuits.name.replace('.tar', '')}`);
+    const files = await getFilesRecursively(
+      `/app/circuits/${circuits.name.replace('.tar', '')}`,
+    );
     await deleteFile(`${outputPath}${circuits.name}`);
     // check the archive contained .zok files only
     files.forEach(file => {
