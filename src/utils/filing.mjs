@@ -1,4 +1,4 @@
-/* eslint-disable babel/camelcase */
+/* eslint-disable camelcase */
 
 import fs from 'fs';
 import tar from 'tar';
@@ -7,7 +7,8 @@ import logger from './logger.mjs';
 
 const outputPath = `/app/output`;
 
-const vkPath = circuitPath => `${outputPath}/${circuitPath}/${path.basename(circuitPath)}_vk.key`;
+const vkPath = circuitPath =>
+  `${outputPath}/${circuitPath}/${path.basename(circuitPath)}_vk.key`;
 
 const proofPath = circuitPath =>
   `${outputPath}/${circuitPath}/${path.basename(circuitPath)}_proof.json`;
@@ -19,15 +20,6 @@ export const readJsonFile = filePath => {
   }
   logger.warn('Unable to locate file: ', filePath);
   return null;
-};
-
-const writeJsonFile = (filePath, jsonObject) => {
-  // this will overwrite any existing file:
-  try {
-    fs.writeFileSync(filePath, JSON.stringify(jsonObject));
-  } catch (err) {
-    throw new Error(err);
-  }
 };
 
 /**
@@ -58,7 +50,7 @@ export const getProofByCircuitPath = circuitPath => {
 export const getProofFromFile = filePath => {
   console.log('in filling ', `${outputPath}/${filePath}`);
   return readJsonFile(`${outputPath}/${filePath}`);
-}
+};
 
 export const untarFiles = async (filePath, fileName) => {
   const dir = fileName.replace('.tar', '');
@@ -69,7 +61,7 @@ export const untarFiles = async (filePath, fileName) => {
   }
   await tar.x({
     file: `${filePath}/${fileName}`,
-    cwd: cwd,
+    cwd,
   });
   return exists;
 };

@@ -5,7 +5,7 @@ import logger from '../utils/logger.mjs';
 import compile from './compile-zok.mjs';
 
 // TODO: REMOVE THE COMPILE MODULE WHEN IT IS CORRECTED ON @eyblockchain/zokrates-zexe.js
-export default async function({
+export default async function generateKeys({
   filepath,
   curve = 'bn128',
   backend = 'bellman',
@@ -39,7 +39,9 @@ export default async function({
     `${circuitName}_pk`,
   );
 
-  const vk = await zokrates.extractVk(`${outputPath}/${circuitDir}/${circuitName}_vk.key`);
+  const vk = await zokrates.extractVk(
+    `${outputPath}/${circuitDir}/${circuitName}_vk.key`,
+  );
 
   logger.info(`Complete ${filepath}`);
   return { vk, filepath };

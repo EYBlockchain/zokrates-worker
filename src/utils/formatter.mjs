@@ -1,3 +1,3 @@
-export const formatTrackingID = trackingID => {
+export default function formatTrackingID(trackingID) {
   return trackingID ? `[${trackingID}] - ` : '';
-};
+}
