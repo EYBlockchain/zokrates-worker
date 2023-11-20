@@ -3,14 +3,14 @@ ARG GPR_TOKEN
 
 FROM zokrates/zokrates:0.8.0 as builder
 
-FROM node:16.0.0 as node-build
+FROM node:20 as node-build
 ARG GPR_TOKEN
 WORKDIR /app
 COPY ./package.json ./package-lock.json ./.npmrc ./
 RUN npm ci
 RUN rm -f .npmrc
 
-FROM node:16.0.0
+FROM node:20
 WORKDIR /app
 
 COPY --from=node-build /app /app
@@ -23,7 +23,7 @@ COPY ./start-script ./start-script
 COPY ./start-dev ./start-dev
 
 RUN apt-get update -y
-RUN apt-get install -y netcat
+RUN apt-get install -y netcat-traditional
 RUN apt-get install vim -y
 # RUN apt-get install libc6
 
