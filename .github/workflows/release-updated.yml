@@ -1,0 +1,36 @@
+name: Docker Package
+
+on:
+  push:
+    branches:
+      - swati/updates
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@masterv1
+
+      - name: Login to Github Packages
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+     # - name: semantic release
+      #  uses: codfish/semantic-release-action@master
+       # id: semantic
+       # env:
+         # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         # GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker push version
+        run: |
+          docker build --build-arg GPR_TOKEN=$GPR_TOKEN -t ghcr.io/eyblockchain/zokrates-worker-starlight-updated:latest .
+          docker push ghcr.io/eyblockchain/zokrates-worker-starlight-updated:latest
+        env:
+          GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+
