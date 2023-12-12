@@ -30,14 +30,11 @@ jobs:
 
     # - run: echo ${{ steps.semantic.outputs.release-version }}
 
-    - name: Docker push version
-        if: steps.semantic.outputs.new-release-published == 'true'
+     - name: Docker push version
         run: |
-          docker login https://docker.pkg.github.com -u $GITHUB_ACTOR -p $GPR_TOKEN
-          docker build --build-arg GPR_TOKEN=$GPR_TOKEN -t docker.pkg.github.com/eyblockchain/zokrates-worker/zokrates-worker-updated:$RELEASE_VERSION .
-          docker push docker.pkg.github.com/eyblockchain/zokrates-worker/zokrates-worker-updated:$RELEASE_VERSION
+          docker build --build-arg GPR_TOKEN=$GPR_TOKEN -t ghcr.io/eyblockchain/zokrates-worker/zokrates-worker-updated:latest .
+          docker push ghcr.io/eyblockchain/zokrates-worker/zokrates-worker-updated:latest
         env:
-          RELEASE_VERSION: v${{ steps.semantic.outputs.release-version }}
           GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
