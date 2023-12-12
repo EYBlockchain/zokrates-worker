@@ -6,6 +6,7 @@ on:
       - swati/updates
 
 jobs:
+build-and-push:
   release:
     runs-on: ubuntu-latest
 
@@ -36,7 +37,3 @@ jobs:
           docker push ghcr.io/eyblockchain/zokrates-worker/zokrates-worker-updated:latest
         env:
           GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-
