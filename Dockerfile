@@ -17,7 +17,7 @@ RUN rustup install nightly-2022-06-28
 RUN cargo +nightly-2022-06-28 build -p zokrates_cli --release
 
 
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 WORKDIR /app
 
 COPY config/default.js config/default.js
