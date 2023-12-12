@@ -30,16 +30,15 @@ jobs:
 
     # - run: echo ${{ steps.semantic.outputs.release-version }}
 
-    - name: Build and push UI docker image
-      uses: docker/build-push-action@v2
-      with:
-        build-args: |
-          GPR_TOKEN=${{ secrets.GPR_TOKEN }}
-        tags: |
-          ghcr.io/eyblockchain/zokrates-worker-starlight-updated:latest
-         username: ${{ github.actor }}
-         password: ${{ secrets.GITHUB_TOKEN }}
-        push: true
+    - name: Docker push version
+        if: steps.semantic.outputs.new-release-published == 'true'
+        run: |
+          docker login https://docker.pkg.github.com -u $GITHUB_ACTOR -p $GPR_TOKEN
+          docker build --build-arg GPR_TOKEN=$GPR_TOKEN -t docker.pkg.github.com/eyblockchain/zokrates-worker/zokrates-worker-updated:$RELEASE_VERSION .
+          docker push docker.pkg.github.com/eyblockchain/zokrates-worker/zokrates-worker-updated:$RELEASE_VERSION
+        env:
+          RELEASE_VERSION: v${{ steps.semantic.outputs.release-version }}
+          GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
