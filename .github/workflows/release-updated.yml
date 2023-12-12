@@ -37,8 +37,8 @@ jobs:
           GPR_TOKEN=${{ secrets.GPR_TOKEN }}
         tags: |
           ghcr.io/eyblockchain/zokrates-worker-starlight-updated:latest
-        # username: ${{ github.actor }}
-        # password: ${{ secrets.GITHUB_TOKEN }}
+         username: ${{ github.actor }}
+         password: ${{ secrets.GITHUB_TOKEN }}
         push: true
 
 
