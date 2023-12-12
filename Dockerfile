@@ -1,5 +1,9 @@
 # build zokrates from source for local verify
 FROM rust:1.53.0 as builder
+ENV USERNAME="app"
+
+RUN addgroup --gid 10001 $USERNAME && \
+    adduser --gid 10001 --uid 10001 --home /app $USERNAME
 WORKDIR /app
 COPY . .
 RUN git clone --depth 1 --branch 0.7.12 https://github.com/Zokrates/ZoKrates.git /app/zoKratesv0.7.12
@@ -35,7 +39,7 @@ ENV ZOKRATES_STDLIBv7 /app/stdlibv7
 ENV ZOKRATES_STDLIB /app/stdlib
 
 RUN npm i
-RUN npm ci
 
+USER $USERNAME:$USERNAME
 EXPOSE 80
 CMD npm start

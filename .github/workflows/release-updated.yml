@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '20.x'
       - name: npm install
         run: |
           npm ci
