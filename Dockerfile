@@ -1,9 +1,6 @@
 # build zokrates from source for local verify
 FROM rust:1.53.0 as builder
-ENV USERNAME="app"
 
-RUN addgroup --gid 10001 $USERNAME && \
-    adduser --gid 10001 --uid 10001 --home /app $USERNAME
 WORKDIR /app
 COPY . .
 RUN git clone --depth 1 --branch 0.7.12 https://github.com/Zokrates/ZoKrates.git /app/zoKratesv0.7.12
@@ -30,7 +27,7 @@ COPY src ./src
 COPY start-script ./start-script
 COPY start-dev ./start-dev
 
-RUN apt-get update && apt-get install -y netcat curl
+RUN apt-get update && apt upgrade -y && apt-get install -y netcat curl
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs gcc g++ make
 
