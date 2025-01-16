@@ -21,12 +21,25 @@ export default async function generateKeys({ filepath, curve = 'bn128' }) {
   );
 
   logger.info('Compile...');
-  await compile(
+  const compileResult = await compile(
     `${circuitsPath}/${filepath}`,
     `${outputPath}/${circuitDir}`,
     `${circuitName}_out`,
     curve,
   );
+  const regex = /Number of constraints:\s*(\d+)/;
+  const match = compileResult.match(regex);
+  if (match) {
+    const numberOfConstraints = match[1];
+    const limit = 20000;
+    if (numberOfConstraints > limit) {
+      throw new Error(`The circuit has ${numberOfConstraints} number of constraints, which exceeds the limit of ${limit} from the current subscription plan`);
+    } else {
+      console.log(`Number of constraints does not exceed limit of ${limit}:`, numberOfConstraints);
+    }
+  } else {
+    throw new Error('Number of constraints not found.');
+  }
 
     logger.info('Setup...');
     await setup(
