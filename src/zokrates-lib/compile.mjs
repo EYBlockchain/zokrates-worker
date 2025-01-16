@@ -21,7 +21,7 @@ export default async function compile(
   curve = 'bn128',
   options = {},
 ) {
-  const { maxReturn = 10000000, verbose = false } = options;
+  const { maxReturn = 10000000, verbose = true } = options;
   if (!fs.existsSync(codePath)) {
     throw new Error('Compile input file(s) not found');
   }
