@@ -33,9 +33,9 @@ export default async function generateKeys({ filepath, curve = 'bn128' }) {
     const numberOfConstraints = match[1];
     const limit = 20000;
     if (numberOfConstraints > limit) {
-      throw new Error(`The circuit has ${numberOfConstraints} number of constraints, which exceeds the limit of ${limit} from the current subscription plan`);
+      throw new Error(`The circuit has ${numberOfConstraints} constraints, which exceeds the limit of ${limit} constraints from the current subscription plan.`);
     } else {
-      console.log(`Number of constraints does not exceed limit of ${limit}:`, numberOfConstraints);
+      console.log(`Number of constraints in the circuit does not exceed limit of ${limit}:`, numberOfConstraints);
     }
   } else {
     throw new Error('Number of constraints not found.');
