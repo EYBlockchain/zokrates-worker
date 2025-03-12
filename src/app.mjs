@@ -4,6 +4,7 @@ import cors from 'cors';
 import fileUpload from 'express-fileupload';
 import generateProof from './routes/generateProof.mjs';
 import generateKeys from './routes/generateKeys.mjs';
+import numConstraints from './routes/numConstraints.mjs';
 import vk from './routes/vk.mjs';
 import loadCircuits from './routes/loadCircuits.mjs';
 
@@ -23,5 +24,6 @@ app.use('/generate-keys', generateKeys);
 app.use('/generate-proof', generateProof);
 app.use('/vk', vk);
 app.use('/load-circuits', loadCircuits);
+app.use('/num-constraints', numConstraints);
 
 export default app;
