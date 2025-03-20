@@ -39,7 +39,7 @@ jobs:
       #          GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker push version
         run: |
-          docker build --build-arg GPR_TOKEN=$GPR_TOKEN -t ghcr.io/eyblockchain/zokrates-worker-updated:latest.
+          docker build --build-arg GPR_TOKEN=$GPR_TOKEN -t ghcr.io/eyblockchain/zokrates-worker-updated:latest .
           docker push ghcr.io/eyblockchain/zokrates-worker-updated:latest
         env:
           GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
