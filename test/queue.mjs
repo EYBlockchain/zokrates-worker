@@ -75,8 +75,8 @@ describe('Testing the Zokrates queue mechanism', () => {
       {
         filepath: 'factor.zok',
         curve: 'bn128',
-        provingScheme: 'gm17',
-        backend: 'libsnark',
+        provingScheme: 'g16',
+        backend: 'bellman',
       },
       {
         correlationId,
@@ -104,8 +104,8 @@ describe('Testing the Zokrates queue mechanism', () => {
         folderpath: 'factor',
         inputs: [13, 3, 2],
         transactionInputs: 'test',
-        provingScheme: 'gm17',
-        backend: 'libsnark',
+        provingScheme: 'g16',
+        backend: 'bellman',
       },
       {
         correlationId,
@@ -130,8 +130,8 @@ describe('Testing the Zokrates queue mechanism', () => {
         folderpath: 'factor',
         inputs: [6, 3, 2],
         transactionInputs: 'test',
-        provingScheme: 'gm17',
-        backend: 'libsnark',
+        provingScheme: 'g16',
+        backend: 'bellman',
       },
       {
         correlationId,
@@ -142,14 +142,14 @@ describe('Testing the Zokrates queue mechanism', () => {
     rabbitmq.listenToReplyQueue(replyTo, correlationId, response => {
       expect(response).to.have.property('type');
       expect(response).to.have.property('data');
-      expect(response.data).to.have.property('proof');
-      expect(response.data).to.have.property('transactionInputs');
-      expect(response.data.proof).to.have.property('a');
-      expect(response.data.proof).to.have.property('b');
-      expect(response.data.proof).to.have.property('c');
-      expect(response.data.proof.a).to.be.instanceof(Array);
-      expect(response.data.type).to.equal('factor');
-      expect(response.data.transactionInputs).to.equal('test');
+      expect(response.body).to.have.property('proof');
+      expect(response.body).to.have.property('transactionInputs');
+      expect(response.body.proof).to.have.property('a');
+      expect(response.body.proof).to.have.property('b');
+      expect(response.body.proof).to.have.property('c');
+      expect(response.body.proof.a).to.be.instanceof(Array);
+      expect(response.body.type).to.equal('factor');
+      expect(response.body.transactionInputs).to.equal('test');
       done();
     });
   });
