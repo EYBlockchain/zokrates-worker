@@ -5,4 +5,4 @@ then
   while ! nc -z ${RABBITMQ_HOST:7} $RABBITMQ_PORT; do sleep 3; done
 fi
 
-npm start
+npx nodemon --watch "" --exec "npm start"

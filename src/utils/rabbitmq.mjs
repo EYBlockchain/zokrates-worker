@@ -3,9 +3,15 @@ import amqp from 'amqplib';
 export default {
   // connect to RabbitMQ server.
   async connect() {
-    this.connection = await amqp.connect(
-      `${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`,
-    );
+    this.connection = await amqp.connect({
+      protocol: 'amqp',
+      hostname: process.env.RABBITMQ_HOST || 'localhost',
+      port: parseInt(process.env.RABBITMQ_PORT || '5672'),
+      username: process.env.RABBITMQ_USER || 'guest',
+      password: process.env.RABBITMQ_PASSWORD || 'guest',
+      frameMax: 131072,
+    });
+
     this.channel = await this.connection.createChannel();
     this.channel.prefetch(1);
   },

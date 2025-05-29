@@ -2,11 +2,14 @@ version: '3.5'
 
 services:
   api:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
       args:
         - GPR_TOKEN
+    depends_on:
+      - rabbitmq
     volumes:
       - ./src:/app/src:delegated
       - ./output:/app/output:delegated
@@ -16,12 +19,13 @@ services:
     ports:
       - 8080:80
     environment:
-      RABBITMQ_HOST: amqp://rabbitmq
+      RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
       ENABLE_QUEUE: 1
     command: ./start-dev
 
   rabbitmq:
+    platform: linux/amd64
     image: rabbitmq
     ports:
       - '5672:5672'

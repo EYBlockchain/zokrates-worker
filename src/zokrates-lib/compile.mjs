@@ -30,12 +30,12 @@ export default async function compile(
   const parsedOutputPath = outputPath.endsWith('/') ? outputPath : `${outputPath}/`;
   return new Promise((resolve, reject) => {
     const zokrates = spawn(
-      '/app/zokratesv7',
+      '/app/zokratesv8',
       ['compile', '-i', codePath, '-o', `${parsedOutputPath}${parsedOutputName}`, '--curve', curve],
       {
         stdio: ['ignore', 'pipe', 'pipe'],
         env: {
-          ZOKRATES_STDLIB: process.env.ZOKRATES_STDLIBv7,
+          ZOKRATES_STDLIB: process.env.ZOKRATES_STDLIBv8,
         },
       },
     );
