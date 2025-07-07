@@ -27,7 +27,7 @@ COPY start-dev ./start-dev
 
 RUN apt-get update && apt-get install -y netcat-traditional curl
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-RUN apt-get install -y nodejs gcc npm g++ make
+RUN apt-get install -y nodejs gcc g++ make
 
 ENV ZOKRATES_HOME /app
 ENV ZOKRATES_STDLIBv8 /app/stdlibv8
