@@ -2,7 +2,6 @@ version: '3.5'
 
 services:
   api:
-    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
@@ -25,7 +24,6 @@ services:
     command: ./start-dev
 
   rabbitmq:
-    platform: linux/amd64
     image: rabbitmq
     ports:
       - '5672:5672'
