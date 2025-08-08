@@ -21,7 +21,7 @@ export default async function generateKeys({ filepath, curve = 'bn128' }) {
   );
 
   logger.info('Compile...');
-  const compileResult = await compile(
+  await compile(
     `${circuitsPath}/${filepath}`,
     `${outputPath}/${circuitDir}`,
     `${circuitName}_out`,
