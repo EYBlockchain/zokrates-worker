@@ -14,31 +14,20 @@ RUN cp -r /app/zoKratesv0.8.8 /app/zoKrates
 
 FROM ubuntu:24.10
 
-
 ENV USERNAME="app"
+
+WORKDIR /app
 
 # Install NodeJs
 RUN apt-get update && \
     apt-get install -y netcat-traditional curl && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs gcc g++ make && \
-    # Remove existing home directory if it exists
-    rm -rf /app && \
-    # Create the app directory and set permissions
-    mkdir /app && \
-    groupadd --gid 10001 $USERNAME && \
-    useradd --gid 10001 --uid 10001 --home /app --shell /bin/bash $USERNAME && \
-    mkdir /npm-cache && \
-    chown -R $USERNAME:$USERNAME /app /npm-cache
+    apt-get install -y nodejs gcc g++ make 
 
 ENV npm_config_cache=/npm-cache
 ENV ZOKRATES_HOME /app
 ENV ZOKRATES_STDLIBv8 /app/stdlibv8
 ENV ZOKRATES_STDLIB /app/stdlib
-
-USER $USERNAME:$USERNAME
-
-WORKDIR /app
 
 COPY config/default.js config/default.js
 COPY package.json package-lock.json ./
@@ -51,6 +40,14 @@ COPY start-script ./start-script
 COPY start-dev ./start-dev
 
 RUN npm i
+
+USER $USERNAME:$USERNAME
+
+# Install NodeJs
+RUN groupadd --gid 10001 $USERNAME && \
+    useradd --gid 10001 --uid 10001 --home /app --shell /bin/bash $USERNAME && \
+    mkdir /npm-cache && \
+    chown -R $USERNAME:$USERNAME /app /npm-cache
 
 EXPOSE 80
 CMD npm start
