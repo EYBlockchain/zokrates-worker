@@ -38,8 +38,8 @@ ENV ZOKRATES_STDLIB /app/stdlib
 RUN npm i
 
 # Change to User defined in base image
-RUN addgroup --gid 10001 $USERNAME && \
-    adduser --gid 10001 --uid 10001 --home /app $USERNAME
+RUN groupadd --gid 10001 $USERNAME && \
+    useradd --gid 10001 --uid 10001 --home /app $USERNAME
 RUN chown -R $USERNAME:$USERNAME /app
 RUN mkdir /npm-cache
 RUN chown -R $USERNAME:$USERNAME /npm-cache
