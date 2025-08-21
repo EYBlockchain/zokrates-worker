@@ -15,6 +15,8 @@ RUN cp -r /app/zoKratesv0.8.8 /app/zoKrates
 FROM ubuntu:24.10
 WORKDIR /app
 
+ENV USERNAME="app"
+
 COPY config/default.js config/default.js
 COPY package.json package-lock.json ./
 COPY --from=builder /app/zoKratesv0.8.8/zokrates_stdlib/stdlib /app/stdlibv8
@@ -34,6 +36,14 @@ ENV ZOKRATES_STDLIBv8 /app/stdlibv8
 ENV ZOKRATES_STDLIB /app/stdlib
 
 RUN npm i
+
+# Change to User defined in base image
+RUN addgroup --gid 10001 $USERNAME && \
+    adduser --gid 10001 --uid 10001 --home /app $USERNAME
+RUN chown -R $USERNAME:$USERNAME /app
+RUN mkdir /npm-cache
+RUN chown -R $USERNAME:$USERNAME /npm-cache
+ENV npm_config_cache=/npm-cache
 
 USER $USERNAME:$USERNAME
 EXPOSE 80
