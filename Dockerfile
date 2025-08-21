@@ -13,9 +13,32 @@ RUN cp -r /app/zoKratesv0.8.8 /app/zoKrates
 
 
 FROM ubuntu:24.10
-WORKDIR /app
+
 
 ENV USERNAME="app"
+
+# Install NodeJs
+RUN apt-get update && \
+    apt-get install -y netcat-traditional curl && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs gcc g++ make && \
+    # Remove existing home directory if it exists
+    rm -rf /app && \
+    # Create the app directory and set permissions
+    mkdir /app && \
+    groupadd --gid 10001 $USERNAME && \
+    useradd --gid 10001 --uid 10001 --home /app --shell /bin/bash $USERNAME && \
+    mkdir /npm-cache && \
+    chown -R $USERNAME:$USERNAME /app /npm-cache
+
+ENV npm_config_cache=/npm-cache
+ENV ZOKRATES_HOME /app
+ENV ZOKRATES_STDLIBv8 /app/stdlibv8
+ENV ZOKRATES_STDLIB /app/stdlib
+
+USER $USERNAME:$USERNAME
+
+WORKDIR /app
 
 COPY config/default.js config/default.js
 COPY package.json package-lock.json ./
@@ -27,24 +50,7 @@ COPY src ./src
 COPY start-script ./start-script
 COPY start-dev ./start-dev
 
-RUN apt-get update && apt-get install -y netcat-traditional curl
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-RUN apt-get install -y nodejs gcc g++ make
-
-ENV ZOKRATES_HOME /app
-ENV ZOKRATES_STDLIBv8 /app/stdlibv8
-ENV ZOKRATES_STDLIB /app/stdlib
-
 RUN npm i
 
-# Change to User defined in base image
-RUN groupadd --gid 10001 $USERNAME && \
-    useradd --gid 10001 --uid 10001 --home /app $USERNAME
-RUN chown -R $USERNAME:$USERNAME /app
-RUN mkdir /npm-cache
-RUN chown -R $USERNAME:$USERNAME /npm-cache
-ENV npm_config_cache=/npm-cache
-
-USER $USERNAME:$USERNAME
 EXPOSE 80
 CMD npm start
