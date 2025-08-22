@@ -40,7 +40,7 @@ RUN npm i
 # Change/Add permission to user $USERNAME
 RUN groupadd --gid 10001 $USERNAME && \
     useradd --gid 10001 --uid 10001 --home /app --shell /bin/bash $USERNAME && \
-    chown -R $USERNAME:$USERNAME /app /npm-cache
+    chown -R $USERNAME:$USERNAME /app /npm-cache /app/output /app/circuits
 # Switch to user $USERNAME from root
 USER $USERNAME:$USERNAME
 EXPOSE 80
