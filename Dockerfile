@@ -33,6 +33,8 @@ COPY --from=builder /app/zoKrates/target/release/zokrates /app/zokrates
 COPY src ./src
 COPY start-script ./start-script
 COPY start-dev ./start-dev
+RUN mkdir -p /app/output
+RUN mkdir -p /app/circuits
 # Install npm packages as root
 RUN npm i
 # Change/Add permission to user $USERNAME
