@@ -33,15 +33,17 @@ COPY --from=builder /app/zoKrates/target/release/zokrates /app/zokrates
 COPY src ./src
 COPY start-script ./start-script
 COPY start-dev ./start-dev
-RUN mkdir -p /app/output
-RUN mkdir -p /app/circuits
 # Install npm packages as root
 RUN npm i
 # Change/Add permission to user $USERNAME
 RUN groupadd --gid 10001 $USERNAME && \
     useradd --gid 10001 --uid 10001 --home /app --shell /bin/bash $USERNAME && \
-    chown -R $USERNAME:$USERNAME /app /npm-cache /app/output /app/circuits
+    chown -R $USERNAME:$USERNAME /app /npm-cache
 # Switch to user $USERNAME from root
-USER $USERNAME:$USERNAME
+USER $USERNAME
+RUN mkdir -p /app/output
+RUN mkdir -p /app/circuits
+RUN chown -R $USERNAME:$USERNAME /app/output
+
 EXPOSE 80
 CMD npm start
