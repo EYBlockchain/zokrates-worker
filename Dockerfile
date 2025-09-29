@@ -9,7 +9,7 @@ RUN cargo +nightly-2022-06-28 build -p zokrates_cli --release
 # Copy the built result into /app/zoKrates
 RUN cp -r /app/zoKratesv0.8.8 /app/zoKrates
 
-FROM ubuntu:24.10
+FROM ubuntu:24.04
 ENV USERNAME="app"
 WORKDIR /app
 # Install NodeJs
