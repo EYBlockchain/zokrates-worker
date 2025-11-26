@@ -38,9 +38,9 @@ jobs:
       #          GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker push version
         run: |
-          docker build --no-cache --build-arg GPR_TOKEN=$GPR_TOKEN -t ghcr.io/eyblockchain/zokrates-worker-updated:v0.4 .
-          docker tag ghcr.io/eyblockchain/zokrates-worker-updated:v0.4 ghcr.io/eyblockchain/zokrates-worker-updated:latest
-          docker push ghcr.io/eyblockchain/zokrates-worker-updated:v0.4
+          docker build --no-cache --build-arg GPR_TOKEN=$GPR_TOKEN -t ghcr.io/eyblockchain/zokrates-worker-updated:v0.5 .
+          docker tag ghcr.io/eyblockchain/zokrates-worker-updated:v0.5 ghcr.io/eyblockchain/zokrates-worker-updated:latest
+          docker push ghcr.io/eyblockchain/zokrates-worker-updated:v0.5
           docker push ghcr.io/eyblockchain/zokrates-worker-updated:latest
         env:
           GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
