@@ -44,6 +44,13 @@ RUN mkdir -p /app/output
 RUN mkdir -p /app/circuits
 # Install npm packages as root
 RUN npm ci --omit=dev
+
+# Remove npm, npx to remove glob vulnerability
+RUN rm -rf /usr/local/lib/node_modules/npm \
+    && rm -f /usr/local/bin/npm /usr/local/bin/npx \
+    && rm -f /usr/local/bin/yarn /usr/local/bin/yarnpkg \
+    && rm -rf /usr/lib/node_modules/npm
+
 # Change/Add permission to user $USERNAME
 RUN groupadd --gid 10001 $USERNAME && \
     useradd --gid 10001 --uid 10001 --home /app --shell /bin/bash $USERNAME && \
