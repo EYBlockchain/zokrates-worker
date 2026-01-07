@@ -58,4 +58,4 @@ RUN groupadd --gid 10001 $USERNAME && \
 # Switch to user $USERNAME from root
 USER $USERNAME:$USERNAME
 EXPOSE 80
-CMD npm start
+CMD ["node", "./src/index.mjs"]
