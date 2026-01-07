@@ -43,7 +43,7 @@ COPY start-dev ./start-dev
 RUN mkdir -p /app/output
 RUN mkdir -p /app/circuits
 # Install npm packages as root
-RUN npm i --omit=dev
+RUN npm ci --omit=dev
 # Change/Add permission to user $USERNAME
 RUN groupadd --gid 10001 $USERNAME && \
     useradd --gid 10001 --uid 10001 --home /app --shell /bin/bash $USERNAME && \
