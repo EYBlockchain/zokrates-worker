@@ -10,13 +10,20 @@ RUN cargo +nightly-2022-06-28 build -p zokrates_cli --release
 RUN cp -r /app/zoKratesv0.8.8 /app/zoKrates
 
 FROM ubuntu:24.04
-ENV USERNAME="app"
+ENV USERNAME="node"
 WORKDIR /app
-# Install NodeJs
+# Install Node.js with cleanup and optimization
 RUN apt-get update && \
-    apt-get install -y netcat-traditional curl && \
+    apt-get install -y --no-install-recommends \
+        netcat-traditional \
+        curl \
+        ca-certificates && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs gcc g++ make && \
+    apt-get install -y --no-install-recommends nodejs && \
+    apt-get remove -y curl && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
     mkdir /npm-cache
 # Setup environment variables
 ENV npm_config_cache=/npm-cache
@@ -36,7 +43,14 @@ COPY start-dev ./start-dev
 RUN mkdir -p /app/output
 RUN mkdir -p /app/circuits
 # Install npm packages as root
-RUN npm i
+RUN npm ci --omit=dev
+
+# Remove npm, npx to remove glob vulnerability
+RUN rm -rf /usr/local/lib/node_modules/npm \
+    && rm -f /usr/local/bin/npm /usr/local/bin/npx \
+    && rm -f /usr/local/bin/yarn /usr/local/bin/yarnpkg \
+    && rm -rf /usr/lib/node_modules/npm
+
 # Change/Add permission to user $USERNAME
 RUN groupadd --gid 10001 $USERNAME && \
     useradd --gid 10001 --uid 10001 --home /app --shell /bin/bash $USERNAME && \
@@ -44,4 +58,4 @@ RUN groupadd --gid 10001 $USERNAME && \
 # Switch to user $USERNAME from root
 USER $USERNAME:$USERNAME
 EXPOSE 80
-CMD npm start
+CMD ["node", "./src/index.mjs"]
