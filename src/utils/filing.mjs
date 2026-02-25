@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import fs from 'fs';
-import tar from 'tar';
+import { x as extractTar } from 'tar';
 import path from 'path';
 import logger from './logger.mjs';
 
@@ -43,7 +43,7 @@ export const untarFiles = async (filePath, fileName) => {
   if (!exists) {
     fs.mkdirSync(cwd);
   }
-  await tar.x({
+  await extractTar({
     file: `${filePath}/${fileName}`,
     cwd,
   });
@@ -51,18 +51,13 @@ export const untarFiles = async (filePath, fileName) => {
 };
 
 export const deleteFile = async filePath => {
-  await fs.rmdir(
-    filePath,
-    {
+  try {
+    await fs.promises.rm(filePath, {
       recursive: true,
-    },
-    err => {
-      if (err) {
-        return console.error(err);
-      }
-      return null;
-    },
-  );
+    });
+  } catch (err) {
+    logger.error('Unable to delete file:', filePath, err);
+  }
 };
 
 export const deleteSingleFile = fileName => {
