@@ -1,5 +1,5 @@
 # build zokrates from source for local verify
-FROM rust:1.53.0 as builder
+FROM rust:1.53.0 AS builder
 WORKDIR /app
 COPY . .
 RUN git clone --depth 1 --branch 0.8.8 https://github.com/Zokrates/ZoKrates /app/zoKratesv0.8.8
@@ -14,6 +14,7 @@ ENV USERNAME="node"
 WORKDIR /app
 # Install Node.js with cleanup and optimization
 RUN apt-get update && \
+    apt-get upgrade -y --no-install-recommends && \
     apt-get install -y --no-install-recommends \
         netcat-traditional \
         curl \
