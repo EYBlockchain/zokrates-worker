@@ -12,30 +12,31 @@
     "test": "mocha"
   },
   "dependencies": {
-    "amqplib": "^0.10.3",
-    "axios": "^1.20.0",
-    "body-parser": "^1.20.4",
-    "config": "^3.3.9",
-    "cors": "2.8.5",
-    "express": "^4.22.3",
-    "express-fileupload": "^1.4.0",
+    "amqplib": "^0.10.4",
+    "axios": "^1.21.1",
+    "body-parser": "^1.20.9",
+    "config": "^3.3.11",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "express-fileupload": "^1.5.1",
     "jsonfile": "^6.1.0",
-    "tar": "^7.5.22",
-    "web3": "^4.2.1",
-    "winston": "^3.3.3"
+    "tar": "^7.5.23",
+    "web3": "^4.16.0",
+    "winston": "^3.14.2"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-http": "^4.3.0",
-    "mocha": "^10.2.0",
-    "nodemon": "^3.0.1"
+    "chai": "^4.4.1",
+    "chai-http": "^4.4.0",
+    "mocha": "^12.0.3",
+    "nodemon": "^3.1.4"
   },
   "overrides": {
     "glob": "11.1.0",
-    "follow-redirects": "1.16.0",
+    "follow-redirects": "^1.16.1",
     "path-to-regexp": "0.1.13",
     "web3": {
-      "ws": "^8.22.0"
+      "ws": "^8.22.0",
+      "zod": "^4.6.6"
     },
     "express": {
       "proxy-addr": "^2.0.8"
