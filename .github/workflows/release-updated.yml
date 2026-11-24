@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v1
         with:
-          node-version: "20.x"
+          node-version: "24.x"
       - name: npm install
         run: |
           npm ci
@@ -38,9 +38,9 @@ jobs:
       #          GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker push version
         run: |
-          docker build --no-cache --build-arg GPR_TOKEN=$GPR_TOKEN -t ghcr.io/eyblockchain/zokrates-worker-updated:v0.8.1 .
-          docker tag ghcr.io/eyblockchain/zokrates-worker-updated:v0.8.1 ghcr.io/eyblockchain/zokrates-worker-updated:latest
-          docker push ghcr.io/eyblockchain/zokrates-worker-updated:v0.8.1
+          docker build --no-cache --build-arg GPR_TOKEN=$GPR_TOKEN -t ghcr.io/eyblockchain/zokrates-worker-updated:v0.8.2 .
+          docker tag ghcr.io/eyblockchain/zokrates-worker-updated:v0.8.2 ghcr.io/eyblockchain/zokrates-worker-updated:latest
+          docker push ghcr.io/eyblockchain/zokrates-worker-updated:v0.8.2
           docker push ghcr.io/eyblockchain/zokrates-worker-updated:latest
         env:
           GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}

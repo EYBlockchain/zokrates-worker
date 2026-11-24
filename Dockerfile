@@ -1,6 +1,9 @@
 # build zokrates from source for local verify
 FROM rust:1.53.0 AS builder
 WORKDIR /app
+# Fix Debian Buster EOL - point to archive repositories
+RUN echo "deb [trusted=yes] http://archive.debian.org/debian buster main" > /etc/apt/sources.list && \
+    echo "deb [trusted=yes] http://archive.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list
 COPY . .
 RUN git clone --depth 1 --branch 0.8.8 https://github.com/Zokrates/ZoKrates /app/zoKratesv0.8.8
 WORKDIR /app/zoKratesv0.8.8
@@ -19,7 +22,7 @@ RUN apt-get update && \
         netcat-traditional \
         curl \
         ca-certificates && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
     apt-get install -y --no-install-recommends nodejs && \
     apt-get remove -y curl && \
     apt-get autoremove -y && \
